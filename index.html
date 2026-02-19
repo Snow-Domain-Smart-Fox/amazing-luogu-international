@@ -17,6 +17,7 @@
 	<link rel="stylesheet"
 		href="https://cdn.jsdmirror.com/gh/zym2013/amazing-luogu-international@main/style/markdown-dark.css">
 	<link rel="stylesheet" href="https://cdn.jsdmirror.com/npm/katex@0.16.27/dist/katex.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdmirror.com/npm/animate.css@4.1.1/animate.min.css">
 	<style>
 		.markdown-body {
 			font-size: 16px;
@@ -26,7 +27,7 @@
 
 		#goBtn {
 			position: absolute;
-			right: -29px;
+			right: 68px;
 			top: 3px;
 			bottom: 4px;
 			padding: 0 16px;
@@ -40,7 +41,7 @@
 		}
 
 		#urlInput {
-			width: 100%;
+			width: 73%;
 			padding: 12px 16px;
 			font-size: 1rem;
 			border: 1px solid var(--border-color);
@@ -49,6 +50,183 @@
 			color: var(--text-color);
 			box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 			transition: border-color 0.2s;
+		}
+
+		.markdown-body .katex-display {
+			overflow-x: auto;
+			overflow-y: hidden;
+		}
+
+		.katex-display .katex {
+			display: block;
+		}
+
+		.notice {
+			margin-block-start: 1em;
+			margin-block-end: 1em;
+			margin-inline-start: 40px;
+			margin-inline-end: 40px;
+			unicode-bidi: isolate;
+			padding: 10px 20px;
+			margin: 0 0 20px;
+			border-left: 5px solid #eee;
+			margin-top: 30px;
+			border-radius: 15px;
+			background-color: var(--card-bg);
+			text-align: left;
+		}
+
+		.notice h2 {
+			margin-top: 0px;
+		}
+
+		.important-notice {
+			border-left: 5px #f85149 solid;
+		}
+
+		.important-notice i {
+			color: #f85149;
+		}
+
+		.flowing-light {
+			animation-delay: 0s;
+			color: #444;
+			text-shadow: 0 0 0 #444;
+			animation: flowing-light 1s ease-in-out infinite alternate;
+			animation-delay: 0.1s;
+		}
+
+		@keyframes flowing-light {
+			to {
+				text-shadow: 0 0 1px #fff,
+					0 0 1px #fff,
+					0 0 3px #fff,
+					0 0 6px #126fcc,
+					0 0 7px #126fcc,
+					0 0 11px #126fcc;
+				color: #aaaaaa;
+			}
+		}
+
+		.page-layout {
+			display: flex;
+			gap: 24px;
+			max-width: 1400px;
+			margin: 0 auto;
+		}
+
+		.main-content {
+			flex: 1;
+			min-width: 0;
+		}
+
+		.toc-sidebar {
+			width: 240px;
+			flex-shrink: 0;
+			position: sticky;
+			top: 80px;
+			align-self: flex-start;
+			background: var(--card-bg);
+			border-radius: var(--border-radius-sm);
+			padding: 16px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+			max-height: calc(100vh - 100px);
+			overflow-y: auto;
+		}
+
+		.toc-sidebar h4 {
+			margin: 0 0 12px 0;
+			font-size: 1rem;
+			color: var(--text-color);
+			border-bottom: 1px solid var(--border-color);
+			padding-bottom: 8px;
+		}
+
+		#toc-content a {
+			display: block;
+			padding: 4px 0;
+			color: var(--text-light);
+			text-decoration: none;
+			font-size: 0.9rem;
+			transition: color 0.2s;
+		}
+
+		#toc-content a:hover {
+			color: var(--primary-color);
+		}
+
+		#toc-content .h2 {
+			padding-left: 12px;
+		}
+
+		#toc-content .h3 {
+			padding-left: 24px;
+		}
+
+		#toc-content .h4 {
+			padding-left: 36px;
+		}
+
+		#toc-content .h5 {
+			padding-left: 48px;
+		}
+
+		#toc-content .h6 {
+			padding-left: 60px;
+		}
+
+		.article-header {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+			align-items: center;
+			margin-bottom: 16px;
+			padding-bottom: 12px;
+			border-bottom: 1px solid var(--border-color);
+		}
+
+		.action-btn {
+			padding: 6px 12px;
+			background: var(--card-bg);
+			border: 1px solid var(--border-color);
+			border-radius: var(--border-radius-sm);
+			color: var(--text-color);
+			cursor: pointer;
+			font-size: 0.9rem;
+			transition: all 0.2s;
+			display: inline-flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.action-btn:hover {
+			background: var(--primary-color);
+			border-color: var(--primary-color);
+			color: #fff;
+		}
+
+		.save-time {
+			margin-left: auto;
+			font-size: 0.85rem;
+			color: var(--text-light);
+		}
+
+		@media (max-width: 1100px) {
+			.page-layout {
+				flex-direction: column;
+			}
+
+			.toc-sidebar {
+				width: 100%;
+				position: static;
+				max-height: 300px;
+			}
+
+			.save-time {
+				margin-left: 0;
+				width: 100%;
+				text-align: right;
+			}
 		}
 	</style>
 </head>
@@ -104,21 +282,61 @@
 						<hr>
 					</div>
 					<p style="color: var(--text-light); margin-bottom: 24px;">请输入任意洛谷文章或剪贴板链接，自动跳转到国际版</p>
-					<div style="position: relative;">
-						<input type="text" id="urlInput"
-							placeholder="例如：https://www.luogu.com.cn/paste/wnvx31ss 或 paste/wnvx31ss/" />
-						<button id="goBtn"><i class="fa-solid fa-bolt"></i></button>
+					<div
+						style="position: relative; align-items: center; flex-direction: row; flex-wrap: nowrap; justify-content: center;">
+						<input type="text" id="urlInput" placeholder="https://www.luogu.com.cn/paste/wnvx31ss，支持简写" />
+						<button id="goBtn"><i class="fa-solid fa-bolt flowing-light"></i></button>
+					</div>
+					<div class="notice important-notice">
+						<h2><i class="fa-solid fa-bell animate__animated animate__infinite animate__swing"></i> 公告：抵制
+							GenGen 国际行动</h2>
+						<p>GenGen 国际是由 GenGen 队（以下简称该团队）运营的保存站，在 Amazing Luogu（以下简称我方）的保存站经过该团队同意后使用该团队 API
+							时，该团队通过篡改数据的方式抹黑我方。</p>
+						<p>虽然交流中表明反代会增加该团队境外成本导致的该行为，但 GenGen 团队的行为还是严重违反了社区规范与社会公德，我们强烈谴责这种行为，并呼吁所有用户抵制 GenGen 国际。</p>
+						<p>但该团队仍有优秀的插件，希望本事件的目的只是抵制 GenGen 国际而不是抵制 GenGen。</p>
 					</div>
 				</div>
 			</main>
 			<main class="content" id="article-page" style="display: none;">
-				<div class="markdown-body" id="article-content">
-					<div class="loading">加载中...</div>
+				<div class="page-layout">
+					<div class="main-content">
+						<div class="article-header">
+							<button id="backBtn" class="action-btn"><i class="fa-solid fa-arrow-left"></i> 返回</button>
+							<button id="refreshBtn" class="action-btn"><i class="fa-solid fa-rotate"></i> 更新</button>
+							<button id="copyRawBtn" class="action-btn"><i class="fa-solid fa-copy"></i> 复制原文</button>
+							<button id="jumpOriginalBtn" class="action-btn"><i class="fa-solid fa-external-link"></i>
+								跳转原文</button>
+							<span id="saveTime" class="save-time"></span>
+						</div>
+						<div class="markdown-body" id="article-content">
+							<div class="loading">加载中...</div>
+						</div>
+					</div>
+					<aside class="toc-sidebar" id="toc-sidebar">
+						<h4>目录</h4>
+						<div id="toc-content"></div>
+					</aside>
 				</div>
 			</main>
 			<main class="content" id="paste-page" style="display: none;">
-				<div class="markdown-body" id="paste-content">
-					<div class="loading">加载中...</div>
+				<div class="page-layout">
+					<div class="main-content">
+						<div class="article-header">
+							<button id="backBtn" class="action-btn"><i class="fa-solid fa-arrow-left"></i> 返回</button>
+							<button id="refreshBtn" class="action-btn"><i class="fa-solid fa-rotate"></i> 更新</button>
+							<button id="copyRawBtn" class="action-btn"><i class="fa-solid fa-copy"></i> 复制原文</button>
+							<button id="jumpOriginalBtn" class="action-btn"><i class="fa-solid fa-external-link"></i>
+								跳转原文</button>
+							<span id="saveTime" class="save-time"></span>
+						</div>
+						<div class="markdown-body" id="paste-content">
+							<div class="loading">加载中...</div>
+						</div>
+					</div>
+					<aside class="toc-sidebar" id="toc-sidebar">
+						<h4>目录</h4>
+						<div id="toc-content"></div>
+					</aside>
 				</div>
 			</main>
 		</div>
@@ -129,6 +347,9 @@
 	<script src="https://cdn.jsdmirror.com/npm/katex@0.16.27/dist/contrib/auto-render.min.js"></script>
 	<script src="https://cdn.jsdmirror.com/gh/highlightjs/cdn-release@11.8.0/build/highlight.min.js"></script>
 	<script>
+		let currentRawContent = '';
+		let currentType = '';
+		let currentId = '';
 		const customExtensions = [
 			{
 				name: 'alignBlock',
@@ -198,6 +419,14 @@
 			}
 		];
 		marked.use({ extensions: customExtensions });
+		function escapeHtml(str) {
+			return str
+				.replace(/&/g, '&amp;')
+				.replace(/</g, '&lt;')
+				.replace(/>/g, '&gt;')
+				.replace(/"/g, '&quot;')
+				.replace(/'/g, '&#039;');
+		}
 		const renderer = new marked.Renderer();
 		renderer.code = function (code, language) {
 			const lang = language || 'plaintext';
@@ -218,14 +447,15 @@
 		});
 		function renderMarkdown(text) {
 			const tmp = document.createElement('div');
-			tmp.innerHTML = marked.parse(text);
+			tmp.innerHTML = marked.parse(escapeHtml(text));
 			renderMathInElement(tmp, {
 				delimiters: [
 					{ left: '$$', right: '$$', display: true },
 					{ left: '$', right: '$', display: false },
 					{ left: '\(', right: '\)', display: false },
 					{ left: '\[', right: '\]', display: true }
-				]
+				],
+				strict: false
 			});
 			return tmp.innerHTML;
 		}
@@ -251,32 +481,57 @@
 				if (activeEl) activeEl.classList.add('active');
 			}
 		}
-		async function loadArticle(id) {
+		async function loadArticle(id, forceRefresh = false) {
 			try {
 				showPage('article');
-				const res = await fetch(`https://luogu-api.amlg.top/api/a/${id}`);
+				currentType = 'article';
+				currentId = id;
+				const fetchOptions = forceRefresh
+					? { cache: 'no-store' }
+					: {};
+				const url = `https://luogu-api.amlg.top/article/${id}` + (forceRefresh ? `?r=1` : '');
+				const res = await fetch(url, fetchOptions);
 				const data = await res.json();
-				document.getElementById('article-content').innerHTML = renderMarkdown(data.content || '无内容');
+				const article = data.data.data.article;
+				currentRawContent = article.content || '';
+				const rendered = renderMarkdown(currentRawContent);
+				document.getElementById('article-content').innerHTML = rendered;
+				document.getElementById('toc-content').innerHTML = generateTOC(rendered);
+				bindTOCClick();
+				const ts = article.time;
+				document.getElementById('saveTime').textContent = ts ? `最后保存: ${formatUnixTime(ts)}` : '';
 				updateBreadcrumb([
 					{ text: '首页', href: '/' },
 					{ text: '文章', href: '/a/y81xoxgi' },
-					{ text: data.author.name + ' 的《' + (data.title || `文章 #${id}`) + '》' }
+					{ text: article.author.name + ' 的《' + (article.title || `文章 #${id}`) + '》' }
 				]);
 			} catch (e) {
 				showPage('article');
 				document.getElementById('article-content').innerHTML = '<p style="color:red">文章加载失败</p>';
 			}
 		}
-		async function loadPaste(id) {
+		async function loadPaste(id, forceRefresh = false) {
 			try {
 				showPage('paste');
-				const res = await fetch(`https://luogu-api.amlg.top/api/p/${id}`);
+				currentType = 'paste';
+				currentId = id;
+				const fetchOptions = forceRefresh
+					? { cache: 'no-store' }
+					: {};
+				const url = `https://luogu-api.amlg.top/paste/${id}` + (forceRefresh ? `?r=1` : '');
+				const res = await fetch(url, fetchOptions);
 				const data = await res.json();
-				document.getElementById('paste-content').innerHTML = renderMarkdown(data.content || '无内容');
+				currentRawContent = data.data.data || '';
+				const rendered = renderMarkdown(currentRawContent);
+				document.getElementById('paste-content').innerHTML = rendered;
+				document.getElementById('toc-content').innerHTML = generateTOC(rendered);
+				bindTOCClick();
+				const ts = data.data.time;
+				document.getElementById('saveTime').textContent = ts ? `最后保存: ${formatUnixTime(ts)}` : '';
 				updateBreadcrumb([
 					{ text: '首页', href: '/' },
 					{ text: '剪贴板', href: '/p/wnvx31ss' },
-					{ text: data.author.name + ` 的剪贴板 #${id}` }
+					{ text: data.data.user.name + ` 的剪贴板 #${id}` }
 				]);
 			} catch (e) {
 				showPage('paste');
@@ -330,6 +585,79 @@
 		document.getElementById('urlInput')?.addEventListener('keypress', (e) => {
 			if (e.key === 'Enter') document.getElementById('goBtn').click();
 		});
+		document.addEventListener('DOMContentLoaded', () => {
+			document.getElementById('copyRawBtn')?.addEventListener('click', copyRawContent);
+			document.getElementById('jumpOriginalBtn')?.addEventListener('click', jumpOriginal);
+			document.getElementById('backBtn')?.addEventListener('click', goBack);
+			document.getElementById('refreshBtn')?.addEventListener('click', refreshData);
+		});
+		function formatUnixTime(ts) {
+			if (!ts) return '';
+			const d = new Date(ts * 1000);
+			return d.toLocaleString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+		}
+		function generateTOC(html) {
+			const tmp = document.createElement('div');
+			tmp.innerHTML = html;
+			const headers = tmp.querySelectorAll('h1, h2, h3, h4, h5, h6');
+			if (headers.length === 0) return '';
+			let toc = '';
+			headers.forEach((h, i) => {
+				const level = h.tagName.toLowerCase();
+				const text = h.textContent.trim();
+				const id = `toc-${level}-${i}`;
+				h.id = id;
+				toc += `<a href="#${id}" class="${level}">${text}</a>`;
+			});
+			return toc;
+		}
+		function bindTOCClick() {
+			document.querySelectorAll('#toc-content a').forEach(a => {
+				a.addEventListener('click', e => {
+					e.preventDefault();
+					const target = document.querySelector(a.getAttribute('href'));
+					if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+				});
+			});
+		}
+		async function copyRawContent() {
+			if (!currentRawContent) return;
+			try {
+				await navigator.clipboard.writeText(currentRawContent);
+				const btn = document.getElementById('copyRawBtn');
+				const original = btn.innerHTML;
+				btn.innerHTML = '<i class="fa-solid fa-check"></i> 已复制';
+				setTimeout(() => btn.innerHTML = original, 1500);
+			} catch (e) {
+				alert('复制失败');
+			}
+		}
+		function jumpOriginal() {
+			if (!currentType || !currentId) return;
+			const url = currentType === 'article'
+				? `https://www.luogu.com/article/${currentId}`
+				: `https://www.luogu.com/paste/${currentId}`;
+			window.open(url, '_blank');
+		}
+		function goBack() {
+			if (window.history.length > 1) window.history.back();
+			else {
+				window.location.pathname = '/';
+				showPage('home');
+			}
+		}
+		async function refreshData() {
+			if (!currentType || !currentId) return;
+			if (currentType === 'article') await loadArticle(currentId, true);
+			else await loadPaste(currentId, true);
+		}
+		const originalParseRoute = parseRoute;
+		parseRoute = function () {
+			currentRawContent = '';
+			currentType = '';
+			currentId = '';
+			originalParseRoute();
+		}
 	</script>
 </body>
 
