@@ -301,7 +301,7 @@
 				<div class="page-layout">
 					<div class="main-content">
 						<div class="article-header">
-							<button id="backBtn" class="action-btn"><i class="fa-solid fa-arrow-left"></i> 返回</button>
+							<!-- <button id="backBtn" class="action-btn"><i class="fa-solid fa-arrow-left"></i> 返回</button> -->
 							<button id="refreshBtn" class="action-btn"><i class="fa-solid fa-rotate"></i> 更新</button>
 							<button id="copyRawBtn" class="action-btn"><i class="fa-solid fa-copy"></i> 复制原文</button>
 							<button id="jumpOriginalBtn" class="action-btn"><i class="fa-solid fa-external-link"></i>
@@ -322,7 +322,7 @@
 				<div class="page-layout">
 					<div class="main-content">
 						<div class="article-header">
-							<button id="backBtn" class="action-btn"><i class="fa-solid fa-arrow-left"></i> 返回</button>
+							<!-- <button id="backBtn" class="action-btn"><i class="fa-solid fa-arrow-left"></i> 返回</button> -->
 							<button id="refreshBtn" class="action-btn"><i class="fa-solid fa-rotate"></i> 更新</button>
 							<button id="copyRawBtn" class="action-btn"><i class="fa-solid fa-copy"></i> 复制原文</button>
 							<button id="jumpOriginalBtn" class="action-btn"><i class="fa-solid fa-external-link"></i>
@@ -486,9 +486,7 @@
 				showPage('article');
 				currentType = 'article';
 				currentId = id;
-				const fetchOptions = forceRefresh
-					? { cache: 'no-store' }
-					: {};
+				const fetchOptions = { cache: 'no-store' };
 				const url = `https://luogu-api.amlg.top/article/${id}` + (forceRefresh ? `?r=1` : '');
 				const res = await fetch(url, fetchOptions);
 				const data = await res.json();
@@ -515,9 +513,7 @@
 				showPage('paste');
 				currentType = 'paste';
 				currentId = id;
-				const fetchOptions = forceRefresh
-					? { cache: 'no-store' }
-					: {};
+				const fetchOptions = { cache: 'no-store' };
 				const url = `https://luogu-api.amlg.top/paste/${id}` + (forceRefresh ? `?r=1` : '');
 				const res = await fetch(url, fetchOptions);
 				const data = await res.json();
