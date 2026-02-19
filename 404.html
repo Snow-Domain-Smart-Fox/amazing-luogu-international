@@ -142,7 +142,7 @@
 			padding-bottom: 8px;
 		}
 
-		#toc-content a {
+		.toc-content a {
 			display: block;
 			padding: 4px 0;
 			color: var(--text-light);
@@ -151,27 +151,27 @@
 			transition: color 0.2s;
 		}
 
-		#toc-content a:hover {
+		.toc-content a:hover {
 			color: var(--primary-color);
 		}
 
-		#toc-content .h2 {
+		.toc-content .h2 {
 			padding-left: 12px;
 		}
 
-		#toc-content .h3 {
+		.toc-content .h3 {
 			padding-left: 24px;
 		}
 
-		#toc-content .h4 {
+		.toc-content .h4 {
 			padding-left: 36px;
 		}
 
-		#toc-content .h5 {
+		.toc-content .h5 {
 			padding-left: 48px;
 		}
 
-		#toc-content .h6 {
+		.toc-content .h6 {
 			padding-left: 60px;
 		}
 
@@ -228,10 +228,100 @@
 				text-align: right;
 			}
 		}
+
+		.markdown-body h1,
+		.markdown-body h2,
+		.markdown-body h3,
+		.markdown-body h4,
+		.markdown-body h5,
+		.markdown-body h6 {
+			scroll-margin-top: 80px;
+			scroll-padding-top: 80px;
+		}
+
+		.global-loading {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			background: var(--bg-color);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 9999;
+			transition: opacity 0.3s, visibility 0.3s;
+		}
+
+		.global-loading.hidden {
+			opacity: 0;
+			visibility: hidden;
+			pointer-events: none;
+		}
+
+		.loading-spinner {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			gap: 16px;
+			color: var(--text-color);
+		}
+
+		.loading-spinner i {
+			font-size: 2.5rem;
+			color: var(--primary-color);
+		}
+
+		.loading-spinner span {
+			font-size: 1rem;
+			color: var(--text-light);
+		}
+
+		.markdown-body .loading {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 40px;
+			color: var(--text-light);
+			gap: 12px;
+		}
+
+		.markdown-body .loading i {
+			color: var(--primary-color);
+			animation: spin 1s linear infinite;
+		}
+
+		@keyframes spin {
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+		#not-found-page {
+			animation: fadeIn 0.3s ease-out;
+		}
+
+		@keyframes fadeIn {
+			from {
+				opacity: 0;
+				transform: translateY(10px);
+			}
+
+			to {
+				opacity: 1;
+				transform: translateY(0);
+			}
+		}
 	</style>
 </head>
 
 <body>
+	<div id="global-loading" class="global-loading">
+		<div class="loading-spinner">
+			<i class="fa-solid fa-spinner fa-spin"></i>
+			<span>加载中...</span>
+		</div>
+	</div>
 	<div id="app">
 		<aside class="sidebar" id="sidebar">
 			<nav class="nav-menu">
@@ -269,6 +359,17 @@
 					<img src="https://cdn.luogu.com.cn/upload/image_hosting/7x00uufg.png" alt="Logo" class="logo-img">
 				</div>
 			</header>
+			<main class="content" id="not-found-page" style="display: none;">
+				<div style="text-align: center; padding: 80px 20px;">
+					<i class="fa-solid fa-ghost"
+						style="font-size: 4rem; color: var(--text-light); margin-bottom: 24px;"></i>
+					<h1 style="font-size: 2rem; color: var(--text-color); margin-bottom: 16px;">404 - 页面未找到</h1>
+					<p style="color: var(--text-light); margin-bottom: 32px;">抱歉，您访问的页面不存在或已被移除。</p>
+					<a href="/" class="action-btn" style="text-decoration: none;">
+						<i class="fa-solid fa-house"></i> 返回首页
+					</a>
+				</div>
+			</main>
 			<main class="content" id="home-page">
 				<div style="text-align: center; max-width: 600px; margin: 0 auto;">
 					<div
@@ -284,7 +385,7 @@
 					<p style="color: var(--text-light); margin-bottom: 24px;">请输入任意洛谷文章或剪贴板链接，自动跳转到国际版</p>
 					<div
 						style="position: relative; align-items: center; flex-direction: row; flex-wrap: nowrap; justify-content: center;">
-						<input type="text" id="urlInput" placeholder="https://www.luogu.com.cn/paste/wnvx31ss，支持简写" />
+						<input type="text" id="urlInput" placeholder="paste/wnvx31ss" />
 						<button id="goBtn"><i class="fa-solid fa-bolt flowing-light"></i></button>
 					</div>
 					<div class="notice important-notice">
@@ -314,7 +415,7 @@
 					</div>
 					<aside class="toc-sidebar" id="toc-sidebar">
 						<h4>目录</h4>
-						<div id="toc-content"></div>
+						<div id="toc-content" class="toc-content"></div>
 					</aside>
 				</div>
 			</main>
@@ -323,11 +424,11 @@
 					<div class="main-content">
 						<div class="article-header">
 							<!-- <button id="backBtn" class="action-btn"><i class="fa-solid fa-arrow-left"></i> 返回</button> -->
-							<button id="refreshBtn" class="action-btn"><i class="fa-solid fa-rotate"></i> 更新</button>
-							<button id="copyRawBtn" class="action-btn"><i class="fa-solid fa-copy"></i> 复制原文</button>
-							<button id="jumpOriginalBtn" class="action-btn"><i class="fa-solid fa-external-link"></i>
+							<button id="refreshBtn-2" class="action-btn"><i class="fa-solid fa-rotate"></i> 更新</button>
+							<button id="copyRawBtn-2" class="action-btn"><i class="fa-solid fa-copy"></i> 复制原文</button>
+							<button id="jumpOriginalBtn-2" class="action-btn"><i class="fa-solid fa-external-link"></i>
 								跳转原文</button>
-							<span id="saveTime" class="save-time"></span>
+							<span id="saveTime-2" class="save-time"></span>
 						</div>
 						<div class="markdown-body" id="paste-content">
 							<div class="loading">加载中...</div>
@@ -335,7 +436,7 @@
 					</div>
 					<aside class="toc-sidebar" id="toc-sidebar">
 						<h4>目录</h4>
-						<div id="toc-content"></div>
+						<div id="toc-content-2" class="toc-content"></div>
 					</aside>
 				</div>
 			</main>
@@ -447,7 +548,7 @@
 		});
 		function renderMarkdown(text) {
 			const tmp = document.createElement('div');
-			tmp.innerHTML = marked.parse(escapeHtml(text));
+			tmp.innerHTML = marked.parse(text);
 			renderMathInElement(tmp, {
 				delimiters: [
 					{ left: '$$', right: '$$', display: true },
@@ -460,22 +561,21 @@
 			return tmp.innerHTML;
 		}
 		function showPage(pageKey) {
-			const pages = ['home', 'article', 'paste'];
+			const pages = ['home', 'article', 'paste', 'not-found'];
 			pages.forEach(k => {
 				const el = document.getElementById(`${k}-page`);
 				if (el) el.style.display = 'none';
 			});
 			const target = document.getElementById(`${pageKey}-page`);
-			if (target) target.style.display = 'block';
-			document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-			let activePage;
-			if (pageKey === 'home') {
-				activePage = 'home';
-			} else if (pageKey === 'article') {
-				activePage = 'articles';
-			} else if (pageKey === 'paste') {
-				activePage = 'clipboard';
+			if (target) {
+				target.style.display = 'block';
+				if (pageKey === 'article' || pageKey === 'paste') {
+					const contentEl = document.getElementById(`${pageKey}-content`);
+					if (contentEl) contentEl.innerHTML = '<div class="loading"><i class="fa-solid fa-spinner"></i><span>加载中...</span></div>';
+				}
 			}
+			document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+			let activePage = pageKey === 'home' ? 'home' : pageKey === 'article' ? 'articles' : pageKey === 'paste' ? 'clipboard' : null;
 			if (activePage) {
 				const activeEl = document.querySelector(`.nav-item[data-page="${activePage}"]`);
 				if (activeEl) activeEl.classList.add('active');
@@ -493,8 +593,9 @@
 				const article = data.data.data.article;
 				currentRawContent = article.content || '';
 				const rendered = renderMarkdown(currentRawContent);
-				document.getElementById('article-content').innerHTML = rendered;
-				document.getElementById('toc-content').innerHTML = generateTOC(rendered);
+				const contentEl = document.getElementById('article-content');
+				contentEl.innerHTML = rendered;
+				document.getElementById('toc-content').innerHTML = generateTOC(contentEl, "article");
 				bindTOCClick();
 				const ts = article.time;
 				document.getElementById('saveTime').textContent = ts ? `最后保存: ${formatUnixTime(ts)}` : '';
@@ -517,17 +618,19 @@
 				const url = `https://luogu-api.amlg.top/paste/${id}` + (forceRefresh ? `?r=1` : '');
 				const res = await fetch(url, fetchOptions);
 				const data = await res.json();
+				const paste = data.data;
 				currentRawContent = data.data.data || '';
 				const rendered = renderMarkdown(currentRawContent);
-				document.getElementById('paste-content').innerHTML = rendered;
-				document.getElementById('toc-content').innerHTML = generateTOC(rendered);
+				const contentEl = document.getElementById('paste-content');
+				contentEl.innerHTML = rendered;
+				document.getElementById('toc-content-2').innerHTML = generateTOC(contentEl, "paste");
 				bindTOCClick();
-				const ts = data.data.time;
-				document.getElementById('saveTime').textContent = ts ? `最后保存: ${formatUnixTime(ts)}` : '';
+				const ts = paste.time;
+				document.getElementById('saveTime-2').textContent = ts ? `最后保存: ${formatUnixTime(ts)}` : '';
 				updateBreadcrumb([
 					{ text: '首页', href: '/' },
 					{ text: '剪贴板', href: '/p/wnvx31ss' },
-					{ text: data.data.user.name + ` 的剪贴板 #${id}` }
+					{ text: paste.user.name + ` 的剪贴板 #${id}` }
 				]);
 			} catch (e) {
 				showPage('paste');
@@ -581,38 +684,47 @@
 		document.getElementById('urlInput')?.addEventListener('keypress', (e) => {
 			if (e.key === 'Enter') document.getElementById('goBtn').click();
 		});
-		document.addEventListener('DOMContentLoaded', () => {
-			document.getElementById('copyRawBtn')?.addEventListener('click', copyRawContent);
-			document.getElementById('jumpOriginalBtn')?.addEventListener('click', jumpOriginal);
-			document.getElementById('backBtn')?.addEventListener('click', goBack);
-			document.getElementById('refreshBtn')?.addEventListener('click', refreshData);
+		document.getElementById('article-page')?.addEventListener('click', (e) => {
+			if (e.target.closest('#refreshBtn')) { e.preventDefault(); refreshData(); }
+			if (e.target.closest('#copyRawBtn')) { e.preventDefault(); copyRawContent(); }
+			if (e.target.closest('#jumpOriginalBtn')) { e.preventDefault(); jumpOriginal(); }
 		});
+		document.getElementById('paste-page')?.addEventListener('click', (e) => {
+			if (e.target.closest('#refreshBtn-2')) { e.preventDefault(); refreshData(); }
+			if (e.target.closest('#copyRawBtn-2')) { e.preventDefault(); copyRawContent(); }
+			if (e.target.closest('#jumpOriginalBtn-2')) { e.preventDefault(); jumpOriginal(); }
+		});
+		document.addEventListener('DOMContentLoaded', () => {
+			parseRoute();
+			setTimeout(hideGlobalLoading, 300);
+		});
+		window.addEventListener('popstate', parseRoute);
 		function formatUnixTime(ts) {
 			if (!ts) return '';
 			const d = new Date(ts * 1000);
 			return d.toLocaleString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
 		}
-		function generateTOC(html) {
-			const tmp = document.createElement('div');
-			tmp.innerHTML = html;
-			const headers = tmp.querySelectorAll('h1, h2, h3, h4, h5, h6');
+		function generateTOC(container, type) {
+			const headers = container.querySelectorAll('h1, h2, h3');
 			if (headers.length === 0) return '';
 			let toc = '';
 			headers.forEach((h, i) => {
 				const level = h.tagName.toLowerCase();
 				const text = h.textContent.trim();
-				const id = `toc-${level}-${i}`;
+				const id = `toc-${type}-${level}-${i}`;
 				h.id = id;
 				toc += `<a href="#${id}" class="${level}">${text}</a>`;
 			});
 			return toc;
 		}
 		function bindTOCClick() {
-			document.querySelectorAll('#toc-content a').forEach(a => {
+			document.querySelectorAll('.toc-content a').forEach(a => {
 				a.addEventListener('click', e => {
 					e.preventDefault();
 					const target = document.querySelector(a.getAttribute('href'));
-					if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+					if (target) {
+						target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+					}
 				});
 			});
 		}
@@ -620,8 +732,12 @@
 			if (!currentRawContent) return;
 			try {
 				await navigator.clipboard.writeText(currentRawContent);
-				const btn = document.getElementById('copyRawBtn');
-				const original = btn.innerHTML;
+				let btn = document.getElementById('copyRawBtn');
+				let original = btn.innerHTML;
+				btn.innerHTML = '<i class="fa-solid fa-check"></i> 已复制';
+				setTimeout(() => btn.innerHTML = original, 1500);
+				btn = document.getElementById('copyRawBtn-2');
+				original = btn.innerHTML;
 				btn.innerHTML = '<i class="fa-solid fa-check"></i> 已复制';
 				setTimeout(() => btn.innerHTML = original, 1500);
 			} catch (e) {
@@ -653,6 +769,15 @@
 			currentType = '';
 			currentId = '';
 			originalParseRoute();
+		}
+	</script>
+
+	<script>
+		function showGlobalLoading() {
+			document.getElementById('global-loading')?.classList.remove('hidden');
+		}
+		function hideGlobalLoading() {
+			document.getElementById('global-loading')?.classList.add('hidden');
 		}
 	</script>
 </body>
