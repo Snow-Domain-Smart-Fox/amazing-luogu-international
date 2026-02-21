@@ -7,19 +7,23 @@
 	<meta name="description" content="Amazing Luogu 国际" />
 	<meta http-equiv="Content-Security-Policy"
 		content="default-src 'self'; script-src 'self' 'unsafe-inline' data: https://cdn.jsdmirror.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' data: https://cdn.jsdmirror.com; img-src 'self' data: https:; font-src 'self' data: https://cdn.jsdmirror.com; connect-src 'self' data: https://luogu-api.amlg.top https://cdn.jsdmirror.com; worker-src 'self'" />
-	<link rel="icon" type="image/svg+xml" href="https://cdn.luogu.com.cn/upload/image_hosting/oqhxzr7u.png" />
+	<link rel="icon" type="image/svg+xml" href="./icon.png" />
 	<title>Amazing Luogu</title>
 	<link rel="stylesheet" href="https://cdn.jsdmirror.com/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
-	<link rel="stylesheet" href="https://cdn.jsdmirror.com/npm/lxgw-wenkai-screen-webfont@1.7.0/style.min.css">
-	<link rel="stylesheet"
-		href="https://cdn.jsdmirror.com/gh/highlightjs/cdn-release@11.8.0/build/styles/atom-one-light.min.css">
+	<link rel="preload" href="https://cdn.jsdmirror.com/npm/lxgw-wenkai-screen-webfont@1.7.0/style.min.css" as="style"
+		crossorigin="anonymous" onload="this.rel='stylesheet'">
+	<link rel="preload"
+		href="https://cdn.jsdmirror.com/gh/highlightjs/cdn-release@11.8.0/build/styles/atom-one-light.min.css"
+		as="style" crossorigin="anonymous" onload="this.rel='stylesheet'">
+	<link rel="preload"
+		href="https://cdn.jsdmirror.com/gh/highlightjs/cdn-release@11.8.0/build/styles/github-dark.min.css" as="style"
+		crossorigin="anonymous" onload="this.rel='stylesheet'">
 	<link rel="stylesheet"
 		href="https://cdn.jsdmirror.com/gh/zym2013/amazing-luogu-international@main/style/markdown.css">
 	<link rel="stylesheet"
 		href="https://cdn.jsdmirror.com/gh/zym2013/amazing-luogu-international@main/style/framework.css">
-	<link rel="stylesheet"
-		href="https://cdn.jsdmirror.com/gh/zym2013/amazing-luogu-international@main/style/markdown-dark.css">
-	<link rel="stylesheet" href="https://cdn.jsdmirror.com/npm/katex@0.16.27/dist/katex.min.css">
+	<link rel="preload" href="https://cdn.jsdmirror.com/npm/katex@0.16.27/dist/katex.min.css" as="style"
+		crossorigin="anonymous" onload="this.rel='stylesheet'">
 	<link rel="stylesheet" href="https://cdn.jsdmirror.com/npm/animate.css@4.1.1/animate.min.css">
 	<style>
 		.markdown-body {
@@ -319,6 +323,31 @@
 		button {
 			font-family: LXGW Wenkai Screen;
 		}
+
+		@media (prefers-color-scheme: dark) {
+
+			.hljs,
+			.code-container,
+			pre {
+				background: #282c34 !important;
+				color: #abb2bf !important;
+			}
+
+			.markdown-body code {
+				background-color: #282c34;
+				color: #abb2bf;
+			}
+
+			.markdown-body blockquote {
+				color: #999;
+				border-left-color: #444;
+			}
+
+			.markdown-body th,
+			.markdown-body td {
+				border-color: #444;
+			}
+		}
 	</style>
 </head>
 
@@ -363,7 +392,8 @@
 					<nav class="breadcrumb" id="breadcrumb"></nav>
 				</div>
 				<div class="logo">
-					<img src="https://cdn.luogu.com.cn/upload/image_hosting/7x00uufg.png" alt="Logo" class="logo-img">
+					<img src="https://cdn.luogu.com.cn/upload/image_hosting/7x00uufg.png" referrerpolicy="no-referrer"
+						crossorigin="anonymous" alt="Logo" class="logo-img">
 				</div>
 			</header>
 			<main class="content" id="not-found-page" style="display: none;">
@@ -422,7 +452,7 @@
 					</div>
 					<aside class="toc-sidebar" id="toc-sidebar">
 						<h4>目录</h4>
-						<div id="toc-content" class="toc-content"></div>
+						<div id="toc-content" class="toc-content"><a href="#" class="h1">无标题</a></div>
 					</aside>
 				</div>
 			</main>
@@ -443,7 +473,7 @@
 					</div>
 					<aside class="toc-sidebar" id="toc-sidebar">
 						<h4>目录</h4>
-						<div id="toc-content-2" class="toc-content"></div>
+						<div id="toc-content-2" class="toc-content"><a href="#" class="h1">无标题</a></div>
 					</aside>
 				</div>
 			</main>
@@ -555,7 +585,12 @@
 		});
 		function renderMarkdown(text) {
 			const tmp = document.createElement('div');
-			tmp.innerHTML = marked.parse(text);
+			tmp.innerHTML = sanitizeHTML(marked.parse(text));
+			const images = tmp.querySelectorAll('img');
+			images.forEach(img => {
+				img.setAttribute('referrerpolicy', 'no-referrer');
+				img.setAttribute('crossorigin', 'anonymous');
+			});
 			renderMathInElement(tmp, {
 				delimiters: [
 					{ left: '$$', right: '$$', display: true },
@@ -566,6 +601,42 @@
 				strict: false
 			});
 			return tmp.innerHTML;
+		}
+		function sanitizeHTML(html) {
+			const parser = new DOMParser();
+			const doc = parser.parseFromString(html, 'text/html');
+			const dangerousTags = ['script', 'link', 'meta', 'object', 'embed', 'style']; // 我们保留 iframe
+			dangerousTags.forEach(tag => {
+				doc.querySelectorAll(tag).forEach(el => el.remove());
+			});
+			doc.querySelectorAll('*').forEach(el => {
+				[...el.attributes].forEach(attr => {
+					if (attr.name.startsWith('on') || attr.name.toLowerCase() === 'style') {
+						el.removeAttribute(attr.name);
+					}
+					if (attr.value && typeof attr.value === 'string' && attr.value.trim().toLowerCase().startsWith('javascript:')) {
+						el.removeAttribute(attr.name);
+					}
+				});
+			});
+			return doc.body.innerHTML;
+		}
+		function updateHighlightTheme() {
+			const isDark = document.documentElement.getAttribute('data-theme') === 'dark' ||
+				document.body.classList.contains('dark-mode') ||
+				window.matchMedia('(prefers-color-scheme: dark)').matches;
+			const lightTheme = document.querySelector('link[href*="atom-one-light"]');
+			const darkTheme = document.getElementById('hljs-dark-theme');
+			if (isDark) {
+				if (lightTheme) lightTheme.disabled = true;
+				if (darkTheme) darkTheme.disabled = false;
+			} else {
+				if (lightTheme) lightTheme.disabled = false;
+				if (darkTheme) darkTheme.disabled = true;
+			}
+			document.querySelectorAll('pre code').forEach((block) => {
+				hljs.highlightElement(block);
+			});
 		}
 		function showPage(pageKey) {
 			const pages = ['home', 'article', 'paste', 'not-found'];
@@ -602,7 +673,8 @@
 				const rendered = renderMarkdown(currentRawContent);
 				const contentEl = document.getElementById('article-content');
 				contentEl.innerHTML = rendered;
-				document.getElementById('toc-content').innerHTML = generateTOC(contentEl, "article");
+				const tocEl = generateTOC(contentEl, "article");
+				document.getElementById('toc-content').innerHTML = (tocEl ? tocEl : `<a href="#" class="h1">无标题</a>`);
 				bindTOCClick();
 				const ts = article.time;
 				document.getElementById('saveTime').textContent = ts ? `最后保存: ${formatUnixTime(ts)}` : '';
@@ -630,7 +702,9 @@
 				const rendered = renderMarkdown(currentRawContent);
 				const contentEl = document.getElementById('paste-content');
 				contentEl.innerHTML = rendered;
-				document.getElementById('toc-content-2').innerHTML = generateTOC(contentEl, "paste");
+				const tocEl = generateTOC(contentEl, "paste");
+				console.log(tocEl);
+				document.getElementById('toc-content-2').innerHTML = (tocEl ? tocEl : `<a href="#" class="h1">无标题</a>`);
 				bindTOCClick();
 				const ts = paste.time;
 				document.getElementById('saveTime-2').textContent = ts ? `最后保存: ${formatUnixTime(ts)}` : '';
@@ -722,7 +796,8 @@
 				h.id = id;
 				toc += `<a href="#${id}" class="${level}">${text}</a>`;
 			});
-			return toc;
+			console.log(toc + " 111");
+			return (toc ? toc : '<a href="#" class="h1">无标题</a>');
 		}
 		function bindTOCClick() {
 			document.querySelectorAll('.toc-content a').forEach(a => {
