@@ -576,6 +576,9 @@
 			renderer: renderer,
 		});
 		function renderMarkdown(text) {
+			text = text.replace(/(^|\s)\$\$\s*\n([\s\S]*?)\n\s*\$\$(?=\s|$)/gm, '$1\n$$$$$2$$$$\n');
+			text = text.replace(/([^\n])\n(\|.*\|)\n(\|.*[-:].*\|)/g, '$1\n\n$2\n$3');
+			console.log(text);
 			const tmp = document.createElement('div');
 			tmp.innerHTML = sanitizeHTML(marked.parse(text));
 			const images = tmp.querySelectorAll('img');
@@ -590,7 +593,12 @@
 					{ left: '\(', right: '\)', display: false },
 					{ left: '\[', right: '\]', display: true }
 				],
-				strict: false
+				strict: false,
+				escape: false,
+				preProcess: (math) => {
+					let processed = math.replace(/\\(\r?\n)/g, '\\\\$1');
+					return processed;
+				}
 			});
 			return tmp.innerHTML;
 		}
@@ -610,6 +618,14 @@
 						el.removeAttribute(attr.name);
 					}
 				});
+			});
+			doc.querySelectorAll('table').forEach(table => {
+				const rows = table.querySelectorAll('tr');
+				if (rows.length > 0 && !table.querySelector('tbody')) {
+					const tbody = doc.createElement('tbody');
+					rows.forEach(tr => tbody.appendChild(tr));
+					table.appendChild(tbody);
+				}
 			});
 			return doc.body.innerHTML;
 		}
