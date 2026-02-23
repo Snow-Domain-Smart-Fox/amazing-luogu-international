@@ -6,25 +6,25 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta name="description" content="Amazing Luogu 国际" />
 	<meta http-equiv="Content-Security-Policy"
-		content="default-src 'self'; script-src 'self' 'unsafe-inline' data: https://cdn.jsdmirror.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' data: https://cdn.jsdmirror.com; img-src 'self' data: https:; font-src 'self' data: https://cdn.jsdmirror.com; connect-src 'self' data: https://luogu-api.amlg.top https://cdn.jsdmirror.com; worker-src 'self'" />
+		content="default-src 'self'; script-src 'self' 'unsafe-inline' data: https://cdn.jsdmirror.cn https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' data: https://cdn.jsdmirror.cn; img-src 'self' data: https:; font-src 'self' data: https://cdn.jsdmirror.cn; connect-src 'self' data: https://luogu-api.amlg.top https://cdn.jsdmirror.cn; worker-src 'self'" />
 	<link rel="icon" type="image/svg+xml" href="./icon.png" />
 	<title>Amazing Luogu</title>
-	<link rel="stylesheet" href="https://cdn.jsdmirror.com/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
-	<link rel="preload" href="https://cdn.jsdmirror.com/npm/lxgw-wenkai-screen-webfont@1.7.0/style.min.css" as="style"
+	<link rel="stylesheet" href="https://cdn.jsdmirror.cn/npm/@fortawesome/fontawesome-free@7.2.0/css/all.min.css">
+	<link rel="preload" href="https://cdn.jsdmirror.cn/npm/lxgw-wenkai-screen-webfont@1.7.0/style.min.css" as="style"
 		crossorigin="anonymous" onload="this.rel='stylesheet'">
 	<link rel="preload"
-		href="https://cdn.jsdmirror.com/gh/highlightjs/cdn-release@11.8.0/build/styles/atom-one-light.min.css"
-		as="style" crossorigin="anonymous" onload="this.rel='stylesheet'">
+		href="https://cdn.jsdmirror.cn/gh/highlightjs/cdn-release@11.8.0/build/styles/atom-one-light.min.css" as="style"
+		crossorigin="anonymous" onload="this.rel='stylesheet'">
 	<link rel="preload"
-		href="https://cdn.jsdmirror.com/gh/highlightjs/cdn-release@11.8.0/build/styles/github-dark.min.css" as="style"
+		href="https://cdn.jsdmirror.cn/gh/highlightjs/cdn-release@11.8.0/build/styles/github-dark.min.css" as="style"
 		crossorigin="anonymous" onload="this.rel='stylesheet'">
 	<link rel="stylesheet"
-		href="https://cdn.jsdmirror.com/gh/zym2013/amazing-luogu-international@main/style/markdown.css">
+		href="https://cdn.jsdmirror.cn/gh/zym2013/amazing-luogu-international@main/style/markdown.css">
 	<link rel="stylesheet"
-		href="https://cdn.jsdmirror.com/gh/zym2013/amazing-luogu-international@main/style/framework.css">
-	<link rel="preload" href="https://cdn.jsdmirror.com/npm/katex@0.16.27/dist/katex.min.css" as="style"
+		href="https://cdn.jsdmirror.cn/gh/zym2013/amazing-luogu-international@main/style/framework.css">
+	<link rel="preload" href="https://cdn.jsdmirror.cn/npm/katex@0.16.27/dist/katex.min.css" as="style"
 		crossorigin="anonymous" onload="this.rel='stylesheet'">
-	<link rel="stylesheet" href="https://cdn.jsdmirror.com/npm/animate.css@4.1.1/animate.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdmirror.cn/npm/animate.css@4.1.1/animate.min.css">
 	<style>
 		.markdown-body {
 			font-size: 16px;
@@ -224,14 +224,12 @@
 			}
 
 			.toc-sidebar {
-				width: 100%;
 				position: static;
 				max-height: 300px;
 			}
 
 			.save-time {
 				margin-left: 0;
-				width: 100%;
 				text-align: right;
 			}
 		}
@@ -348,6 +346,403 @@
 				border-color: #444;
 			}
 		}
+
+		.user-profile {
+			max-width: 900px;
+			margin: 0 auto;
+			display: flex;
+			flex-direction: column;
+			gap: 16px;
+		}
+
+		.user-header {
+			position: relative;
+			overflow: hidden;
+		}
+
+		.user-info {
+			display: flex;
+			align-items: center;
+			gap: 16px;
+			padding: 80px 16px 16px 16px;
+			margin-top: 0px;
+			background-size: cover;
+			background-position: center;
+		}
+
+		.user-avatar {
+			width: 80px;
+			height: 80px;
+			border-radius: 50%;
+			border: 3px solid var(--card-bg);
+			object-fit: cover;
+		}
+
+		.user-name {
+			margin: 0;
+			font-size: 1.4rem;
+		}
+
+		.user-name.orange {
+			color: #f39c11;
+		}
+
+		.user-name.blue {
+			color: #3498db;
+		}
+
+		.user-name.green {
+			color: #5eb95e;
+		}
+
+		.user-name.purple {
+			color: #9d3dcf;
+		}
+
+		.user-name.red {
+			color: #e74c3c;
+		}
+
+		.user-name.cheater {
+			color: rgb(173, 139, 0);
+		}
+
+		.user-name.grey {
+			color: rgb(191, 191, 191);
+		}
+
+		.user-slogan {
+			margin: 4px 0 0;
+			color: #fff;
+			font-size: 0.9rem;
+		}
+
+		.user-badges {
+			display: flex;
+			gap: 8px;
+			margin-top: 8px;
+		}
+
+		.badge {
+			padding: 2px 8px;
+			border-radius: 12px;
+			font-size: 0.8rem;
+			background: var(--border-color);
+		}
+
+		.stat-grid {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+			gap: 12px;
+			padding: 16px;
+		}
+
+		.stat-item {
+			text-align: center;
+		}
+
+		.stat-value {
+			display: block;
+			font-size: 1.5rem;
+			font-weight: 600;
+			color: var(--primary-color);
+		}
+
+		.stat-label {
+			font-size: 0.85rem;
+			color: var(--text-light);
+		}
+
+		.prize-list {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+			padding: 16px;
+		}
+
+		.prize-item {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			padding: 6px 12px;
+			background: var(--border-color);
+			border-radius: var(--border-radius-sm);
+			font-size: 0.9rem;
+		}
+
+		.prize-year {
+			font-weight: 600;
+		}
+
+		.prize-contest {
+			color: var(--text-light);
+		}
+
+		.prize-name {
+			color: var(--primary-color);
+		}
+
+		.elo-table table {
+			width: 100%;
+			border-collapse: collapse;
+		}
+
+		.elo-table th,
+		.elo-table td {
+			padding: 8px 12px;
+			border-bottom: 1px solid var(--border-color);
+			text-align: left;
+		}
+
+		.diff-up {
+			color: #52c41a;
+		}
+
+		.diff-down {
+			color: #f5222d;
+		}
+
+		.activity-grid {
+			display: grid;
+			grid-template-columns: repeat(7, 1fr);
+			gap: 4px;
+			padding: 0 16px 16px;
+		}
+
+		.activity-day {
+			aspect-ratio: 1;
+			background: var(--border-color);
+			border-radius: 4px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 0.7rem;
+			cursor: pointer;
+			transition: transform 0.1s;
+		}
+
+		.activity-day:hover {
+			transform: scale(1.1);
+			background: var(--primary-color);
+			color: #fff;
+		}
+
+		.card {
+			background: var(--card-bg);
+			border-radius: var(--border-radius-sm);
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+		}
+
+		.card h3 {
+			margin: 0;
+			padding: 12px 16px;
+			border-bottom: 1px solid var(--border-color);
+			font-size: 1.1rem;
+		}
+
+		.markdown-body {
+			padding: 16px;
+		}
+
+		@media (max-width: 768px) {
+			.user-info {
+				flex-direction: column;
+				text-align: center;
+			}
+
+			.activity-grid {
+				grid-template-columns: repeat(7, 1fr);
+				gap: 2px;
+			}
+		}
+
+		/* 回复区域样式 */
+		.replies-section {
+			margin-top: 24px;
+		}
+
+		.replies-section h3 {
+			margin: 0 0 16px;
+			padding: 12px 16px;
+			border-bottom: 1px solid var(--border-color);
+			font-size: 1.1rem;
+			display: flex;
+			align-items: center;
+			gap: 8px;
+		}
+
+		.text-light {
+			color: var(--text-light);
+			font-size: 0.9rem;
+			font-weight: normal;
+		}
+
+		.text-error {
+			color: #f5222d;
+			text-align: center;
+			padding: 20px;
+		}
+
+		.replies-list {
+			display: flex;
+			flex-direction: column;
+			gap: 12px;
+			padding: 0 16px 16px;
+		}
+
+		.reply-item {
+			padding: 12px;
+			background: var(--card-bg);
+			border-radius: var(--border-radius-sm);
+			border: 1px solid var(--border-color);
+			transition: border-color 0.2s;
+		}
+
+		.reply-item:hover {
+			border-color: var(--primary-color);
+		}
+
+		.reply-header {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin-bottom: 8px;
+		}
+
+		.reply-avatar {
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+			object-fit: cover;
+			flex-shrink: 0;
+		}
+
+		.reply-meta {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			flex-wrap: wrap;
+			font-size: 0.9rem;
+		}
+
+		.reply-author {
+			font-weight: 500;
+		}
+
+		.reply-author.orange {
+			color: #fa8c16;
+		}
+
+		.reply-author.blue {
+			color: #1890ff;
+		}
+
+		.reply-author.green {
+			color: #52c41a;
+		}
+
+		.reply-author.red {
+			color: #f5222d;
+		}
+
+		.reply-time {
+			color: var(--text-light);
+			font-size: 0.85rem;
+		}
+
+		.badge {
+			padding: 1px 6px;
+			border-radius: 10px;
+			font-size: 0.75rem;
+			background: var(--border-color);
+			color: var(--text-color);
+		}
+
+		.badge.ccf-level-1 {
+			background: #e6f7ff;
+			color: #1890ff;
+		}
+
+		.badge.ccf-level-2 {
+			background: #f6ffed;
+			color: #52c41a;
+		}
+
+		.badge.ccf-level-3 {
+			background: #fff7e6;
+			color: #fa8c16;
+		}
+
+		.badge.ccf-level-4 {
+			background: #fff1f0;
+			color: #f5222d;
+		}
+
+		.badge.ccf-level-5 {
+			background: #f9f0ff;
+			color: #722ed1;
+		}
+
+		.badge.ccf-level-6 {
+			background: #fff0f6;
+			color: #eb2f96;
+		}
+
+		.reply-content {
+			padding-left: 42px;
+			font-size: 0.95rem;
+			line-height: 1.6;
+		}
+
+		.reply-content .markdown-body {
+			padding: 0;
+			font-size: inherit;
+		}
+
+		.reply-content .markdown-body p {
+			margin: 0;
+		}
+
+		.reply-content .markdown-body img {
+			max-width: 100%;
+			max-height: 200px;
+			border-radius: var(--border-radius-sm);
+			cursor: pointer;
+			transition: transform 0.2s;
+		}
+
+		.reply-content .markdown-body img:hover {
+			transform: scale(1.02);
+		}
+
+		/* 加载更多按钮 */
+		#load-more-replies {
+			width: fit-content;
+		}
+
+		/* 响应式适配 */
+		@media (max-width: 768px) {
+			.reply-content {
+				padding-left: 0;
+				padding-top: 8px;
+			}
+
+			.reply-header {
+				flex-wrap: wrap;
+			}
+		}
+
+		/* 暗色模式适配 */
+		@media (prefers-color-scheme: dark) {
+			.reply-item {
+				background: var(--card-bg);
+				border-color: #444;
+			}
+
+			.badge {
+				background: #333;
+			}
+		}
 	</style>
 </head>
 
@@ -407,6 +802,7 @@
 					</a>
 				</div>
 			</main>
+			<main class="content" id="user-page" style="display: none;"></main>
 			<main class="content" id="home-page">
 				<div style="text-align: center; max-width: 600px; margin: 0 auto;">
 					<div
@@ -419,7 +815,8 @@
 						</h1>
 						<hr>
 					</div>
-					<p style="color: var(--text-light); margin-bottom: 24px;">请输入任意洛谷文章或剪贴板链接，自动跳转到国际版</p>
+					<p style="color: var(--text-light);">请输入任意洛谷文章或剪贴板链接，自动跳转到国际版</p>
+					<p style="color: var(--text-light); margin-bottom: 24px;">新：支持用户主页啦！</p>
 					<div
 						style="position: relative; align-items: center; flex-direction: row; flex-wrap: nowrap; justify-content: center;">
 						<input type="text" id="urlInput" placeholder="paste/wnvx31ss" />
@@ -441,6 +838,15 @@
 						<div class="markdown-body" id="article-content">
 							<div class="loading">加载中...</div>
 						</div>
+						<div class="replies-section card" id="replies-section" style="display: none; padding-bottom: 12px;">
+							<h3><i class="fa-regular fa-comment-dots"></i> 回复列表 <span id="replies-count" class="text-light"></span></h3>
+							<div id="replies-list" class="replies-list">
+								<div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> 加载回复中...</div>
+							</div>
+							<button id="load-more-replies" class="action-btn" style="display: none; margin: 12px auto;">
+								<i class="fa-solid fa-plus"></i> 加载更多
+							</button>
+						</div>
 					</div>
 					<aside class="toc-sidebar" id="toc-sidebar">
 						<h4>目录</h4>
@@ -452,7 +858,6 @@
 				<div class="page-layout">
 					<div class="main-content">
 						<div class="article-header">
-							<!-- <button id="backBtn" class="action-btn"><i class="fa-solid fa-arrow-left"></i> 返回</button> -->
 							<button id="refreshBtn-2" class="action-btn"><i class="fa-solid fa-rotate"></i> 更新</button>
 							<button id="copyRawBtn-2" class="action-btn"><i class="fa-solid fa-copy"></i> 复制原文</button>
 							<button id="jumpOriginalBtn-2" class="action-btn"><i class="fa-solid fa-external-link"></i>
@@ -471,11 +876,11 @@
 			</main>
 		</div>
 	</div>
-	<script src="https://cdn.jsdmirror.com/gh/zym2013/amazing-luogu-international@main/function/framework.js"></script>
-	<script src="https://cdn.jsdmirror.com/npm/marked@4.0.0/marked.min.js"></script>
-	<script src="https://cdn.jsdmirror.com/npm/katex@0.16.27/dist/katex.min.js"></script>
-	<script src="https://cdn.jsdmirror.com/npm/katex@0.16.27/dist/contrib/auto-render.min.js"></script>
-	<script src="https://cdn.jsdmirror.com/gh/highlightjs/cdn-release@11.8.0/build/highlight.min.js"></script>
+	<script src="https://cdn.jsdmirror.cn/gh/zym2013/amazing-luogu-international@main/function/framework.js"></script>
+	<script src="https://cdn.jsdmirror.cn/npm/marked@4.0.0/marked.min.js"></script>
+	<script src="https://cdn.jsdmirror.cn/npm/katex@0.16.27/dist/katex.min.js"></script>
+	<script src="https://cdn.jsdmirror.cn/npm/katex@0.16.27/dist/contrib/auto-render.min.js"></script>
+	<script src="https://cdn.jsdmirror.cn/gh/highlightjs/cdn-release@11.8.0/build/highlight.min.js"></script>
 	<script>
 		let currentRawContent = '';
 		let currentType = '';
@@ -602,6 +1007,24 @@
 			});
 			return tmp.innerHTML;
 		}
+		function formatRelativeTime(timestamp) {
+			if (!timestamp) return '';
+			const now = Date.now();
+			const time = timestamp * 1000;
+			const diff = now - time;
+			const seconds = Math.floor(diff / 1000);
+			const minutes = Math.floor(seconds / 60);
+			const hours = Math.floor(minutes / 60);
+			const days = Math.floor(hours / 24);
+			if (seconds < 60) return '刚刚';
+			if (minutes < 60) return `${minutes}分钟前`;
+			if (hours < 24) return `${hours}小时前`;
+			if (days < 7) return `${days}天前`;
+			return new Date(time).toLocaleDateString('zh-CN', {
+				month: '2-digit',
+				day: '2-digit'
+			});
+		}
 		function sanitizeHTML(html) {
 			const parser = new DOMParser();
 			const doc = parser.parseFromString(html, 'text/html');
@@ -667,16 +1090,131 @@
 				if (activeEl) activeEl.classList.add('active');
 			}
 		}
+		let currentArticleReplies = {
+			articleId: null,
+			lastId: null,
+			hasMore: true,
+			loading: false,
+			count: 0,
+			high: 0
+		};
+		async function loadArticleReplies(articleId, lastId = null, limit = 20, append = false) {
+			if (currentArticleReplies.loading || !currentArticleReplies.hasMore) return;
+			currentArticleReplies.loading = true;
+			const repliesList = document.getElementById('replies-list');
+			const loadMoreBtn = document.getElementById('load-more-replies');
+			if (!append) {
+				repliesList.innerHTML = '<div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> 加载回复中...</div>';
+				loadMoreBtn.style.display = 'none';
+			}
+			try {
+				let url = `https://luogu-api.amlg.top/article/${articleId}/replies?r=1`;
+				if (lastId) url += `&after=${lastId}`;
+				const res = await fetch(url, { cache: 'no-store' });
+				const data = await res.json();
+				if (!data.success || !data.data?.replySlice) {
+					throw new Error('加载失败');
+				}
+				const replies = data.data.replySlice;
+				currentArticleReplies.lastId = replies.length > 0 ? replies[replies.length - 1].id : null;
+				currentArticleReplies.hasMore = (currentArticleReplies.high ? currentArticleReplies.high : 0) < currentArticleReplies.count;
+				currentArticleReplies.high += replies.length;
+				console.log(currentArticleReplies.high);
+				renderReplies(replies, append);
+				const countEl = document.getElementById('replies-count');
+				if (countEl) {
+					const currentCount = repliesList.querySelectorAll('.reply-item').length;
+					countEl.textContent = `(${currentCount}${currentArticleReplies.hasMore ? '+' : ''})`;
+				}
+				loadMoreBtn.style.display = currentArticleReplies.hasMore ? 'flex' : 'none';
+			} catch (e) {
+				console.error('加载回复失败:', e);
+				if (!append) {
+					repliesList.innerHTML = '<p class="text-error">回复加载失败，请稍后重试</p>';
+				}
+			} finally {
+				currentArticleReplies.loading = false;
+			}
+		}
+		function renderReplies(replies, append = false) {
+			const repliesList = document.getElementById('replies-list');
+			if (!append && !repliesList.querySelector('.loading')) {
+				repliesList.innerHTML = '';
+			}
+			const loadingEl = repliesList.querySelector('.loading');
+			if (loadingEl) loadingEl.remove();
+			if (replies.length === 0 && !append) {
+				repliesList.innerHTML = '<p class="text-light" style="text-align:center;padding:20px">暂无回复，快来抢沙发～</p>';
+				return;
+			}
+			const fragment = document.createDocumentFragment();
+			replies.forEach(reply => {
+				const replyEl = document.createElement('div');
+				replyEl.className = 'reply-item';
+				replyEl.innerHTML = `
+            <div class="reply-header">
+                <img src="${reply.author.avatar}" class="reply-avatar" referrerpolicy="no-referrer" crossorigin="anonymous">
+                <div class="reply-meta">
+                    <span class="reply-author ${reply.author.color?.toLowerCase()}">${escapeHtml(reply.author.name)}</span>
+                    <span class="reply-time" title="${new Date(reply.time * 1000).toLocaleString('zh-CN')}">${formatRelativeTime(reply.time)}</span>
+                </div>
+            </div>
+            <div class="reply-content markdown-body" data-reply-id="${reply.id}">
+                ${renderMarkdown(reply.content)}
+            </div>
+        `;
+				fragment.appendChild(replyEl);
+			});
+			repliesList.appendChild(fragment);
+			replies.forEach(reply => {
+				const contentEl = repliesList.querySelector(`[data-reply-id="${reply.id}"]`);
+				if (contentEl && /(\$[\s\S]*?\$|\\\(|\\\[)/.test(reply.content)) {
+					renderMathInElement(contentEl, {
+						delimiters: [
+							{ left: '$$', right: '$$', display: true },
+							{ left: '$', right: '$', display: false },
+							{ left: '\(', right: '\)', display: false },
+							{ left: '\[', right: '\]', display: true }
+						],
+						strict: false,
+						escape: false,
+						preProcess: (math) => {
+							let fixed = math.replace(/\\(\r?\n)/g, '\\\\$1');
+							fixed = fixed.replace(/\\(\s*\})/g, '\\\\$1');
+							return fixed;
+						}
+					});
+				}
+			});
+		}
+		function handleLoadMoreReplies() {
+			if (currentArticleReplies.articleId) {
+				loadArticleReplies(
+					currentArticleReplies.articleId,
+					currentArticleReplies.lastId,
+					20,
+					true
+				);
+			}
+		}
 		async function loadArticle(id, forceRefresh = false) {
 			try {
 				showPage('article');
 				currentType = 'article';
 				currentId = id;
+				currentArticleReplies = {
+					articleId: id,
+					lastId: null,
+					hasMore: true,
+					loading: false,
+					high: 0
+				};
 				const fetchOptions = { cache: 'no-store' };
 				const url = `https://luogu-api.amlg.top/article/${id}` + (forceRefresh ? `?r=1` : '');
 				const res = await fetch(url, fetchOptions);
 				const data = await res.json();
 				const article = data.data.data.article;
+				currentArticleReplies.count = data.data.data.article.replyCount;
 				currentRawContent = article.content || '';
 				const rendered = renderMarkdown(currentRawContent);
 				const contentEl = document.getElementById('article-content');
@@ -691,6 +1229,11 @@
 					{ text: '文章', href: '/a/y81xoxgi' },
 					{ text: article.author.name + ' 的《' + (article.title || `文章 #${id}`) + '》' }
 				]);
+				const repliesSection = document.getElementById('replies-section');
+				if (repliesSection) {
+					repliesSection.style.display = 'block';
+					setTimeout(() => loadArticleReplies(id, null, 10, false), 100);
+				}
 			} catch (e) {
 				showPage('article');
 				document.getElementById('article-content').innerHTML = '<p style="color:red">文章加载失败</p>';
@@ -736,9 +1279,36 @@
 				const id = path.split('/')[2];
 				if (id) loadPaste(id);
 				else showPage('home');
+			} else if (path.startsWith('/user/')) {
+				const uid = path.split('/')[2];
+				if (uid && /^\d+$/.test(uid)) {
+					loadUserProfile(uid);
+				} else {
+					showPage('not-found');
+				}
 			} else {
 				showPage('home');
 				updateBreadcrumb([{ text: '首页', href: '/' }]);
+			}
+		}
+		async function loadUserProfile(uid, forceRefresh = false) {
+			try {
+				showPage('user');
+				const fetchOptions = { cache: 'no-store' };
+				const url = `https://luogu-api.amlg.top/user/${uid}` + (forceRefresh ? `?r=1` : '');
+				const res = await fetch(url, fetchOptions);
+				const data = await res.json();
+				if (!data.success || !data.data?.data?.user) {
+					throw new Error('用户不存在');
+				}
+				renderUserProfile(data.data.data, uid);
+				updateBreadcrumb([
+					{ text: '首页', href: '/' },
+					{ text: `用户 #${uid}`, href: `/user/${uid}` }
+				]);
+			} catch (e) {
+				console.error('加载用户失败:', e);
+				showPage('not-found');
 			}
 		}
 		document.getElementById('goBtn')?.addEventListener('click', () => {
@@ -786,6 +1356,15 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			parseRoute();
 			setTimeout(hideGlobalLoading, 300);
+		});
+		document.getElementById('load-more-replies')?.addEventListener('click', handleLoadMoreReplies);
+		document.getElementById('article-page')?.addEventListener('click', (e) => {
+			if (e.target.closest('#refreshBtn')) {
+				e.preventDefault();
+				currentArticleReplies = { articleId: null, lastId: null, hasMore: true, loading: false };
+				document.getElementById('replies-section')?.style.setProperty('display', 'none');
+				refreshData();
+			}
 		});
 		window.addEventListener('popstate', parseRoute);
 		function formatUnixTime(ts) {
@@ -859,6 +1438,122 @@
 			currentType = '';
 			currentId = '';
 			originalParseRoute();
+		}
+		function renderUserProfile(userData, uid) {
+			const user = userData.user;
+			const prizes = userData.prizes || [];
+			const eloHistory = userData.elo || [];
+			const dailyCounts = userData.dailyCounts || {};
+			const gu = userData.gu || {};
+			const html = `
+        <div class="user-profile">
+            <div class="user-header card">
+                <div class="user-info" style="background-image: url('${user.background || ''}')">
+                    <img src="${user.avatar}" class="user-avatar" referrerpolicy="no-referrer" crossorigin="anonymous">
+                    <div class="user-meta">
+                        <h2 class="user-name ${user.color?.toLowerCase()}">${escapeHtml(user.name)}</h2>
+                        ${user.slogan ? `<p class="user-slogan">${escapeHtml(user.slogan)}</p>` : ''}
+                        <div class="user-badges">
+                            ${user.ccfLevel ? `<span class="badge ccf-level-${user.ccfLevel}">CCF ${user.ccfLevel}级</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="user-stats card">
+                <div class="stat-grid">
+                    <div class="stat-item">
+                        <span class="stat-value">${user.passedProblemCount ? user.passedProblemCount : '未知'}</span>
+                        <span class="stat-label">通过题目</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">${user.submittedProblemCount ? user.submittedProblemCount : '未知'}</span>
+                        <span class="stat-label">提交次数</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">${user.followerCount}</span>
+                        <span class="stat-label">粉丝</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value">${user.followingCount}</span>
+                        <span class="stat-label">关注</span>
+                    </div>
+                    ${gu.rating ? `
+                    <div class="stat-item">
+                        <span class="stat-value">${gu.rating}</span>
+                        <span class="stat-label">排名</span>
+                    </div>` : ''}
+                    ${eloHistory[0]?.rating ? `
+                    <div class="stat-item">
+                        <span class="stat-value">${eloHistory[0].rating}</span>
+                        <span class="stat-label">等级分</span>
+                    </div>` : ''}
+                </div>
+            </div>
+            ${prizes.length > 0 ? `
+            <div class="user-prizes card">
+                <h3><i class="fa-solid fa-award"></i> 获奖记录</h3>
+                <div class="prize-list">
+                    ${prizes.map(p => `
+                        <div class="prize-item">
+                            <span class="prize-year">${p.prize.year}</span>
+                            <span class="prize-contest">${escapeHtml(p.prize.contest)}</span>
+                            <span class="prize-name">${escapeHtml(p.prize.prize)}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>` : ''}
+            ${eloHistory.length > 0 ? `
+            <div class="user-elo card">
+                <h3><i class="fa-solid fa-award"></i> 等级分波动历史</h3>
+                <div class="elo-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>时间</th>
+                                <th>比赛</th>
+                                <th>评级</th>
+                                <th>变化</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${eloHistory.slice(0, 10).map(e => `
+                                <tr>
+                                    <td>${formatUnixTime(e.time)}</td>
+                                    <td>${escapeHtml(e.contest.name)}</td>
+                                    <td>${e.rating}</td>
+                                    <td class="${e.prevDiff >= 0 ? 'diff-up' : 'diff-down'}">
+                                        ${e.prevDiff != null ? (e.prevDiff >= 0 ? '+' : '') + e.prevDiff : '-'}
+                                    </td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            </div>` : ''}
+            ${user.introduction ? `
+            <div class="user-intro card">
+                <h3><i class="fa-solid fa-user-pen"></i> 个人简介</h3>
+                <div class="markdown-body" id="user-intro-content">
+                </div>
+            </div>` : ''}
+            <!-- ${Object.keys(dailyCounts).length > 0 ? `
+            <div class="user-activity card">
+                <h3>近期活动</h3>
+                <div class="activity-grid">
+                    ${Object.entries(dailyCounts).slice(-30).map(([date, counts]) => `
+                        <div class="activity-day" data-date="${date}" title="${date}: ${counts[0]} 提交, ${counts[1]} 通过">
+                            <span class="activity-count">${counts[0]}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>` : ''} -->
+        </div>
+    `;
+			document.getElementById('user-page').innerHTML = html;
+			const introEl = document.getElementById('user-intro-content');
+			if (introEl && user.introduction) {
+				introEl.innerHTML = renderMarkdown(user.introduction);
+			}
 		}
 	</script>
 
