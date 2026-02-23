@@ -981,6 +981,7 @@
 			renderer: renderer,
 		});
 		function renderMarkdown(text) {
+			text = escapeHtml(text);
 			text = text.replace(/(^|\s)\$\$\s*\n([\s\S]*?)\n\s*\$\$(?=\s|$)/gm, '$1\n$$$$$2$$$$\n');
 			text = text.replace(/([^\n])\n(\|.*\|)\n(\|.*[-:].*\|)/g, '$1\n\n$2\n$3');
 			console.log(text);
@@ -994,9 +995,7 @@
 			renderMathInElement(tmp, {
 				delimiters: [
 					{ left: '$$', right: '$$', display: true },
-					{ left: '$', right: '$', display: false },
-					{ left: '\(', right: '\)', display: false },
-					{ left: '\[', right: '\]', display: true }
+					{ left: '$', right: '$', display: false }
 				],
 				strict: false,
 				escape: false,
