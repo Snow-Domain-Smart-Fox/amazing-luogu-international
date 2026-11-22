@@ -775,6 +775,10 @@
 					<i class="fa-solid fa-clipboard-list nav-icon"></i>
 					<span class="nav-text">剪贴板</span>
 				</a>
+				<a href="/d/1431586" class="nav-item" data-page="discuss">
+					<i class="fa-solid fa-comments nav-icon"></i>
+					<span class="nav-text">讨论</span>
+				</a>
 			</nav>
 		</aside>
 		<div class="sidebar-overlay" id="sidebarOverlay"></div>
@@ -802,7 +806,6 @@
 					</a>
 				</div>
 			</main>
-			<main class="content" id="user-page" style="display: none;"></main>
 			<main class="content" id="home-page">
 				<div style="text-align: center; max-width: 600px; margin: 0 auto;">
 					<div
@@ -815,7 +818,7 @@
 						</h1>
 						<hr>
 					</div>
-					<p style="color: var(--text-light);">请输入任意洛谷文章、剪贴板或用户链接，自动跳转到国际版</p>
+					<p style="color: var(--text-light);">请输入任意洛谷文章、剪贴板或讨论链接，自动跳转到国际版</p>
 					<div
 						style="position: relative; align-items: center; flex-direction: row; flex-wrap: nowrap; justify-content: center;">
 						<input type="text" id="urlInput" placeholder="paste/wnvx31ss" />
@@ -836,15 +839,6 @@
 						</div>
 						<div class="markdown-body" id="article-content">
 							<div class="loading">加载中...</div>
-						</div>
-						<div class="replies-section card" id="replies-section" style="display: none; padding-bottom: 12px;">
-							<h3><i class="fa-regular fa-comment-dots"></i> 回复列表 <span id="replies-count" class="text-light"></span></h3>
-							<div id="replies-list" class="replies-list">
-								<div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> 加载回复中...</div>
-							</div>
-							<button id="load-more-replies" class="action-btn" style="display: none; margin: 12px auto;">
-								<i class="fa-solid fa-plus"></i> 加载更多
-							</button>
 						</div>
 					</div>
 					<aside class="toc-sidebar" id="toc-sidebar">
@@ -870,6 +864,26 @@
 					<aside class="toc-sidebar" id="toc-sidebar">
 						<h4>目录</h4>
 						<div id="toc-content-2" class="toc-content"><a href="#" class="h1">无标题</a></div>
+					</aside>
+				</div>
+			</main>
+			<main class="content" id="discuss-page" style="display: none;">
+				<div class="page-layout">
+					<div class="main-content">
+						<div class="article-header">
+							<button id="refreshBtn-3" class="action-btn"><i class="fa-solid fa-rotate"></i> 更新</button>
+							<button id="copyRawBtn-3" class="action-btn"><i class="fa-solid fa-copy"></i> 复制原文</button>
+							<button id="jumpOriginalBtn-3" class="action-btn"><i class="fa-solid fa-external-link"></i>
+								跳转原文</button>
+							<span id="saveTime-3" class="save-time"></span>
+						</div>
+						<div class="markdown-body" id="discuss-content">
+							<div class="loading">加载中...</div>
+						</div>
+					</div>
+					<aside class="toc-sidebar" id="toc-sidebar">
+						<h4>目录</h4>
+						<div id="toc-content-3" class="toc-content"><a href="#" class="h1">无标题</a></div>
 					</aside>
 				</div>
 			</main>
@@ -1071,7 +1085,7 @@
 			});
 		}
 		function showPage(pageKey) {
-			const pages = ['home', 'article', 'paste', 'not-found'];
+			const pages = ['home', 'article', 'paste', 'discuss', 'not-found'];
 			pages.forEach(k => {
 				const el = document.getElementById(`${k}-page`);
 				if (el) el.style.display = 'none';
@@ -1079,123 +1093,16 @@
 			const target = document.getElementById(`${pageKey}-page`);
 			if (target) {
 				target.style.display = 'block';
-				if (pageKey === 'article' || pageKey === 'paste') {
+				if (pageKey === 'article' || pageKey === 'paste' || pageKey === 'discuss') {
 					const contentEl = document.getElementById(`${pageKey}-content`);
 					if (contentEl) contentEl.innerHTML = '<div class="loading"><i class="fa-solid fa-spinner"></i><span>加载中...</span></div>';
 				}
 			}
 			document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-			let activePage = pageKey === 'home' ? 'home' : pageKey === 'article' ? 'articles' : pageKey === 'paste' ? 'clipboard' : null;
+			let activePage = pageKey === 'home' ? 'home' : pageKey === 'article' ? 'articles' : pageKey === 'paste' ? 'clipboard' : pageKey === 'discuss' ? 'discuss' : null;
 			if (activePage) {
 				const activeEl = document.querySelector(`.nav-item[data-page="${activePage}"]`);
 				if (activeEl) activeEl.classList.add('active');
-			}
-		}
-		let currentArticleReplies = {
-			articleId: null,
-			lastId: null,
-			hasMore: true,
-			loading: false,
-			count: 0,
-			high: 0
-		};
-		async function loadArticleReplies(articleId, lastId = null, limit = 20, append = false) {
-			if (currentArticleReplies.loading || !currentArticleReplies.hasMore) return;
-			currentArticleReplies.loading = true;
-			const repliesList = document.getElementById('replies-list');
-			const loadMoreBtn = document.getElementById('load-more-replies');
-			if (!append) {
-				repliesList.innerHTML = '<div class="loading"><i class="fa-solid fa-spinner fa-spin"></i> 加载回复中...</div>';
-				loadMoreBtn.style.display = 'none';
-			}
-			try {
-				let url = `https://luogu-api.amlg.top/article/${articleId}/replies?r=1`;
-				if (lastId) url += `&after=${lastId}`;
-				const res = await fetch(url, { cache: 'no-store' });
-				const data = await res.json();
-				if (!data.success || !data.data?.replySlice) {
-					throw new Error('加载失败');
-				}
-				const replies = data.data.replySlice;
-				currentArticleReplies.lastId = replies.length > 0 ? replies[replies.length - 1].id : null;
-				currentArticleReplies.hasMore = (currentArticleReplies.high ? currentArticleReplies.high : 0) < currentArticleReplies.count;
-				currentArticleReplies.high += replies.length;
-				console.log(currentArticleReplies.high);
-				renderReplies(replies, append);
-				const countEl = document.getElementById('replies-count');
-				if (countEl) {
-					const currentCount = repliesList.querySelectorAll('.reply-item').length;
-					countEl.textContent = `(${currentCount}${currentArticleReplies.hasMore ? '+' : ''})`;
-				}
-				loadMoreBtn.style.display = currentArticleReplies.hasMore ? 'flex' : 'none';
-			} catch (e) {
-				console.error('加载回复失败:', e);
-				if (!append) {
-					repliesList.innerHTML = '<p class="text-error">回复加载失败，请稍后重试</p>';
-				}
-			} finally {
-				currentArticleReplies.loading = false;
-			}
-		}
-		function renderReplies(replies, append = false) {
-			const repliesList = document.getElementById('replies-list');
-			if (!append && !repliesList.querySelector('.loading')) {
-				repliesList.innerHTML = '';
-			}
-			const loadingEl = repliesList.querySelector('.loading');
-			if (loadingEl) loadingEl.remove();
-			if (replies.length === 0 && !append) {
-				repliesList.innerHTML = '<p class="text-light" style="text-align:center;padding:20px">暂无回复，快来抢沙发～</p>';
-				return;
-			}
-			const fragment = document.createDocumentFragment();
-			replies.forEach(reply => {
-				const replyEl = document.createElement('div');
-				replyEl.className = 'reply-item';
-				replyEl.innerHTML = `
-            <div class="reply-header">
-                <img src="${reply.author.avatar}" class="reply-avatar" referrerpolicy="no-referrer" crossorigin="anonymous">
-                <div class="reply-meta">
-                    <span class="reply-author ${reply.author.color?.toLowerCase()}">${escapeHtml(reply.author.name)}</span>
-                    <span class="reply-time" title="${new Date(reply.time * 1000).toLocaleString('zh-CN')}">${formatRelativeTime(reply.time)}</span>
-                </div>
-            </div>
-            <div class="reply-content markdown-body" data-reply-id="${reply.id}">
-                ${renderMarkdown(reply.content)}
-            </div>
-        `;
-				fragment.appendChild(replyEl);
-			});
-			repliesList.appendChild(fragment);
-			replies.forEach(reply => {
-				const contentEl = repliesList.querySelector(`[data-reply-id="${reply.id}"]`);
-				if (contentEl && /(\$[\s\S]*?\$|\\\(|\\\[)/.test(reply.content)) {
-					renderMathInElement(contentEl, {
-						delimiters: [
-							{ left: '$$', right: '$$', display: true },
-							{ left: '$', right: '$', display: false },
-							{ left: '\(', right: '\)', display: false },
-							{ left: '\[', right: '\]', display: true }
-						],
-						strict: false,
-						escape: false,
-						preProcess: (math) => {
-							let fixed = math.replace(/\\(\r?\n)/g, '\\\\$1');
-							fixed = fixed.replace(/\\(\s*\})/g, '\\\\$1');
-							return fixed;
-						}
-					});
-				}
-			});
-		}
-		function handleLoadMoreReplies() {
-			if (currentArticleReplies.articleId) {
-				loadArticleReplies(
-					currentArticleReplies.articleId,
-					currentArticleReplies.lastId,
-					20,
-					true
-				);
 			}
 		}
 		async function loadArticle(id, forceRefresh = false) {
@@ -1203,19 +1110,11 @@
 				showPage('article');
 				currentType = 'article';
 				currentId = id;
-				currentArticleReplies = {
-					articleId: id,
-					lastId: null,
-					hasMore: true,
-					loading: false,
-					high: 0
-				};
 				const fetchOptions = { cache: 'no-store' };
 				const url = `https://luogu-api.amlg.top/article/${id}` + (forceRefresh ? `?r=1` : '');
 				const res = await fetch(url, fetchOptions);
 				const data = await res.json();
 				const article = data.data.data.article;
-				currentArticleReplies.count = data.data.data.article.replyCount;
 				currentRawContent = article.content || '';
 				const rendered = renderMarkdown(currentRawContent);
 				const contentEl = document.getElementById('article-content');
@@ -1230,11 +1129,6 @@
 					{ text: '文章', href: '/a/y81xoxgi' },
 					{ text: article.author.name + ' 的《' + (article.title || `文章 #${id}`) + '》' }
 				]);
-				const repliesSection = document.getElementById('replies-section');
-				if (repliesSection) {
-					repliesSection.style.display = 'block';
-					setTimeout(() => loadArticleReplies(id, null, 10, false), 100);
-				}
 			} catch (e) {
 				showPage('article');
 				document.getElementById('article-content').innerHTML = '<p style="color:red">文章加载失败</p>';
@@ -1249,8 +1143,8 @@
 				const url = `https://luogu-api.amlg.top/paste/${id}` + (forceRefresh ? `?r=1` : '');
 				const res = await fetch(url, fetchOptions);
 				const data = await res.json();
-				const paste = data.data;
-				currentRawContent = data.data.data || '';
+				const paste = data.data.data.paste;
+				currentRawContent = paste ? paste.data || '' : '';
 				const rendered = renderMarkdown(currentRawContent);
 				const contentEl = document.getElementById('paste-content');
 				contentEl.innerHTML = rendered;
@@ -1258,16 +1152,47 @@
 				console.log(tocEl);
 				document.getElementById('toc-content-2').innerHTML = (tocEl ? tocEl : `<a href="#" class="h1">无标题</a>`);
 				bindTOCClick();
-				const ts = paste.time;
+				const ts = paste ? paste.time : null;
 				document.getElementById('saveTime-2').textContent = ts ? `最后保存: ${formatUnixTime(ts)}` : '';
 				updateBreadcrumb([
 					{ text: '首页', href: '/' },
 					{ text: '剪贴板', href: '/p/wnvx31ss' },
-					{ text: paste.user.name + ` 的剪贴板 #${id}` }
+					{ text: (paste && paste.user ? paste.user.name : '匿名') + ` 的剪贴板 #${id}` }
 				]);
 			} catch (e) {
 				showPage('paste');
 				document.getElementById('paste-content').innerHTML = '<p style="color:red">剪贴板加载失败</p>';
+			}
+		}
+		async function loadDiscuss(id, forceRefresh = false) {
+			try {
+				showPage('discuss');
+				currentType = 'discuss';
+				currentId = id;
+				const fetchOptions = { cache: 'no-store' };
+				const url = `https://luogu-api.amlg.top/discuss/${id}` + (forceRefresh ? `?r=1` : '');
+				const res = await fetch(url, fetchOptions);
+				const data = await res.json();
+				const post = data && data.data && data.data.data ? data.data.data.post : null;
+				currentRawContent = post ? post.content || '' : '';
+				const rendered = renderMarkdown(currentRawContent);
+				const contentEl = document.getElementById('discuss-content');
+				contentEl.innerHTML = rendered;
+				const tocEl = generateTOC(contentEl, "discuss");
+				document.getElementById('toc-content-3').innerHTML = (tocEl ? tocEl : `<a href="#" class="h1">无标题</a>`);
+				bindTOCClick();
+				const ts = post ? post.time : null;
+				document.getElementById('saveTime-3').textContent = ts ? `最后保存: ${formatUnixTime(ts)}` : '';
+				const authorName = post && post.author ? post.author.name : '';
+				const postTitle = post && post.title ? post.title : `讨论 #${id}`;
+				updateBreadcrumb([
+					{ text: '首页', href: '/' },
+					{ text: '讨论', href: '/d/1431586' },
+					{ text: authorName ? `${authorName} 的《${postTitle}》` : postTitle }
+				]);
+			} catch (e) {
+				showPage('discuss');
+				document.getElementById('discuss-content').innerHTML = '<p style="color:red">讨论加载失败</p>';
 			}
 		}
 		function parseRoute() {
@@ -1280,36 +1205,13 @@
 				const id = path.split('/')[2];
 				if (id) loadPaste(id);
 				else showPage('home');
-			} else if (path.startsWith('/user/')) {
-				const uid = path.split('/')[2];
-				if (uid && /^\d+$/.test(uid)) {
-					loadUserProfile(uid);
-				} else {
-					showPage('not-found');
-				}
+			} else if (path.startsWith('/d/') || path.startsWith('/discuss/')) {
+				const id = path.split('/')[2];
+				if (id) loadDiscuss(id);
+				else showPage('home');
 			} else {
 				showPage('home');
 				updateBreadcrumb([{ text: '首页', href: '/' }]);
-			}
-		}
-		async function loadUserProfile(uid, forceRefresh = false) {
-			try {
-				showPage('user');
-				const fetchOptions = { cache: 'no-store' };
-				const url = `https://luogu-api.amlg.top/user/${uid}` + (forceRefresh ? `?r=1` : '');
-				const res = await fetch(url, fetchOptions);
-				const data = await res.json();
-				if (!data.success || !data.data?.data?.user) {
-					throw new Error('用户不存在');
-				}
-				renderUserProfile(data.data.data, uid);
-				updateBreadcrumb([
-					{ text: '首页', href: '/' },
-					{ text: `用户 #${uid}`, href: `/user/${uid}` }
-				]);
-			} catch (e) {
-				console.error('加载用户失败:', e);
-				showPage('not-found');
 			}
 		}
 		document.getElementById('goBtn')?.addEventListener('click', () => {
@@ -1332,15 +1234,15 @@
 			}
 			const articleMatch = path.match(/^\/(?:article|a)\/([^\/\?\#]+)/i);
 			const pasteMatch = path.match(/^\/(?:paste|p)\/([^\/\?\#]+)/i);
-            const userMatch = path.match(/^\/user\/(\d+)/i);
+			const discussMatch = path.match(/^\/(?:discuss|d)\/([^\/\?\#]+)/i);
 			if (articleMatch) {
 				window.location.pathname = `/a/${articleMatch[1]}`;
 			} else if (pasteMatch) {
 				window.location.pathname = `/p/${pasteMatch[1]}`;
-			} else if (userMatch) {
-				window.location.pathname = `/user/${userMatch[1]}`;
+			} else if (discussMatch) {
+				window.location.pathname = `/d/${discussMatch[1]}`;
 			} else {
-				alert('未识别到有效的文章、剪贴板或用户 ID');
+				alert('未识别到有效的文章、剪贴板或讨论 ID');
 			}
 		});
 		document.getElementById('urlInput')?.addEventListener('keypress', (e) => {
@@ -1356,18 +1258,14 @@
 			if (e.target.closest('#copyRawBtn-2')) { e.preventDefault(); copyRawContent(); }
 			if (e.target.closest('#jumpOriginalBtn-2')) { e.preventDefault(); jumpOriginal(); }
 		});
+		document.getElementById('discuss-page')?.addEventListener('click', (e) => {
+			if (e.target.closest('#refreshBtn-3')) { e.preventDefault(); refreshData(); }
+			if (e.target.closest('#copyRawBtn-3')) { e.preventDefault(); copyRawContent(); }
+			if (e.target.closest('#jumpOriginalBtn-3')) { e.preventDefault(); jumpOriginal(); }
+		});
 		document.addEventListener('DOMContentLoaded', () => {
 			parseRoute();
 			setTimeout(hideGlobalLoading, 300);
-		});
-		document.getElementById('load-more-replies')?.addEventListener('click', handleLoadMoreReplies);
-		document.getElementById('article-page')?.addEventListener('click', (e) => {
-			if (e.target.closest('#refreshBtn')) {
-				e.preventDefault();
-				currentArticleReplies = { articleId: null, lastId: null, hasMore: true, loading: false };
-				document.getElementById('replies-section')?.style.setProperty('display', 'none');
-				refreshData();
-			}
 		});
 		window.addEventListener('popstate', parseRoute);
 		function formatUnixTime(ts) {
@@ -1412,6 +1310,12 @@
 				original = btn.innerHTML;
 				btn.innerHTML = '<i class="fa-solid fa-check"></i> 已复制';
 				setTimeout(() => btn.innerHTML = original, 1500);
+				btn = document.getElementById('copyRawBtn-3');
+				if (btn) {
+					original = btn.innerHTML;
+					btn.innerHTML = '<i class="fa-solid fa-check"></i> 已复制';
+					setTimeout(() => btn.innerHTML = original, 1500);
+				}
 			} catch (e) {
 				alert('复制失败');
 			}
@@ -1420,6 +1324,8 @@
 			if (!currentType || !currentId) return;
 			const url = currentType === 'article'
 				? `https://www.luogu.com/article/${currentId}`
+				: currentType === 'discuss'
+				? `https://www.luogu.com/discuss/${currentId}`
 				: `https://www.luogu.com/paste/${currentId}`;
 			window.open(url, '_blank');
 		}
@@ -1433,6 +1339,7 @@
 		async function refreshData() {
 			if (!currentType || !currentId) return;
 			if (currentType === 'article') await loadArticle(currentId, true);
+			else if (currentType === 'discuss') await loadDiscuss(currentId, true);
 			else await loadPaste(currentId, true);
 		}
 		const originalParseRoute = parseRoute;
@@ -1441,122 +1348,6 @@
 			currentType = '';
 			currentId = '';
 			originalParseRoute();
-		}
-		function renderUserProfile(userData, uid) {
-			const user = userData.user;
-			const prizes = userData.prizes || [];
-			const eloHistory = userData.elo || [];
-			const dailyCounts = userData.dailyCounts || {};
-			const gu = userData.gu || {};
-			const html = `
-        <div class="user-profile">
-            <div class="user-header card">
-                <div class="user-info" style="background-image: url('${user.background || ''}')">
-                    <img src="${user.avatar}" class="user-avatar" referrerpolicy="no-referrer" crossorigin="anonymous">
-                    <div class="user-meta">
-                        <h2 class="user-name ${user.color?.toLowerCase()}">${escapeHtml(user.name)}</h2>
-                        ${user.slogan ? `<p class="user-slogan">${escapeHtml(user.slogan)}</p>` : ''}
-                        <div class="user-badges">
-                            ${user.ccfLevel ? `<span class="badge ccf-level-${user.ccfLevel}">CCF ${user.ccfLevel}级</span>` : ''}
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="user-stats card">
-                <div class="stat-grid">
-                    <div class="stat-item">
-                        <span class="stat-value">${user.passedProblemCount ? user.passedProblemCount : '未知'}</span>
-                        <span class="stat-label">通过题目</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">${user.submittedProblemCount ? user.submittedProblemCount : '未知'}</span>
-                        <span class="stat-label">提交次数</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">${user.followerCount}</span>
-                        <span class="stat-label">粉丝</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-value">${user.followingCount}</span>
-                        <span class="stat-label">关注</span>
-                    </div>
-                    ${gu.rating ? `
-                    <div class="stat-item">
-                        <span class="stat-value">${gu.rating}</span>
-                        <span class="stat-label">排名</span>
-                    </div>` : ''}
-                    ${eloHistory[0]?.rating ? `
-                    <div class="stat-item">
-                        <span class="stat-value">${eloHistory[0].rating}</span>
-                        <span class="stat-label">等级分</span>
-                    </div>` : ''}
-                </div>
-            </div>
-            ${prizes.length > 0 ? `
-            <div class="user-prizes card">
-                <h3><i class="fa-solid fa-award"></i> 获奖记录</h3>
-                <div class="prize-list">
-                    ${prizes.map(p => `
-                        <div class="prize-item">
-                            <span class="prize-year">${p.prize.year}</span>
-                            <span class="prize-contest">${escapeHtml(p.prize.contest)}</span>
-                            <span class="prize-name">${escapeHtml(p.prize.prize)}</span>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>` : ''}
-            ${eloHistory.length > 0 ? `
-            <div class="user-elo card">
-                <h3><i class="fa-solid fa-award"></i> 等级分波动历史</h3>
-                <div class="elo-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>时间</th>
-                                <th>比赛</th>
-                                <th>评级</th>
-                                <th>变化</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${eloHistory.slice(0, 10).map(e => `
-                                <tr>
-                                    <td>${formatUnixTime(e.time)}</td>
-                                    <td>${escapeHtml(e.contest.name)}</td>
-                                    <td>${e.rating}</td>
-                                    <td class="${e.prevDiff >= 0 ? 'diff-up' : 'diff-down'}">
-                                        ${e.prevDiff != null ? (e.prevDiff >= 0 ? '+' : '') + e.prevDiff : '-'}
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            </div>` : ''}
-            ${user.introduction ? `
-            <div class="user-intro card">
-                <h3><i class="fa-solid fa-user-pen"></i> 个人简介</h3>
-                <div class="markdown-body" id="user-intro-content">
-                </div>
-            </div>` : ''}
-            <!-- ${Object.keys(dailyCounts).length > 0 ? `
-            <div class="user-activity card">
-                <h3>近期活动</h3>
-                <div class="activity-grid">
-                    ${Object.entries(dailyCounts).slice(-30).map(([date, counts]) => `
-                        <div class="activity-day" data-date="${date}" title="${date}: ${counts[0]} 提交, ${counts[1]} 通过">
-                            <span class="activity-count">${counts[0]}</span>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>` : ''} -->
-        </div>
-    `;
-			document.getElementById('user-page').innerHTML = html;
-			const introEl = document.getElementById('user-intro-content');
-			if (introEl && user.introduction) {
-				introEl.innerHTML = renderMarkdown(user.introduction);
-			}
 		}
 	</script>
 
