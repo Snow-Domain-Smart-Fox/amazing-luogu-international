@@ -1105,15 +1105,24 @@
 				if (activeEl) activeEl.classList.add('active');
 			}
 		}
+		async function fetchLuogu(apiPath, forceRefresh = false) {
+			const url = `https://luogu-api.amlg.top${apiPath}` + (forceRefresh ? '?r=1' : '');
+			const res = await fetch(url, { cache: 'no-store' });
+			let data = null;
+			try { data = await res.json(); } catch (e) { data = null; }
+			if (res.status === 429) {
+				const sec = Number(data && data.retry_after_sec) || 60;
+				throw new Error(`请求过于频繁，请 ${sec} 秒后重试`);
+			}
+			if (!res.ok || !data) throw new Error('请求失败，请稍后重试');
+			return data;
+		}
 		async function loadArticle(id, forceRefresh = false) {
 			try {
 				showPage('article');
 				currentType = 'article';
 				currentId = id;
-				const fetchOptions = { cache: 'no-store' };
-				const url = `https://luogu-api.amlg.top/article/${id}` + (forceRefresh ? `?r=1` : '');
-				const res = await fetch(url, fetchOptions);
-				const data = await res.json();
+				const data = await fetchLuogu(`/article/${id}`, forceRefresh);
 				const article = data.data.data.article;
 				currentRawContent = article.content || '';
 				const rendered = renderMarkdown(currentRawContent);
@@ -1131,7 +1140,8 @@
 				]);
 			} catch (e) {
 				showPage('article');
-				document.getElementById('article-content').innerHTML = '<p style="color:red">文章加载失败</p>';
+				const msg = e && typeof e.message === 'string' && e.message.indexOf('请求') === 0 ? e.message : '文章加载失败';
+				document.getElementById('article-content').innerHTML = '<p style="color:red">' + msg + '</p>';
 			}
 		}
 		async function loadPaste(id, forceRefresh = false) {
@@ -1139,10 +1149,7 @@
 				showPage('paste');
 				currentType = 'paste';
 				currentId = id;
-				const fetchOptions = { cache: 'no-store' };
-				const url = `https://luogu-api.amlg.top/paste/${id}` + (forceRefresh ? `?r=1` : '');
-				const res = await fetch(url, fetchOptions);
-				const data = await res.json();
+				const data = await fetchLuogu(`/paste/${id}`, forceRefresh);
 				const paste = data.data.data.paste;
 				currentRawContent = paste ? paste.data || '' : '';
 				const rendered = renderMarkdown(currentRawContent);
@@ -1161,7 +1168,8 @@
 				]);
 			} catch (e) {
 				showPage('paste');
-				document.getElementById('paste-content').innerHTML = '<p style="color:red">剪贴板加载失败</p>';
+				const msg = e && typeof e.message === 'string' && e.message.indexOf('请求') === 0 ? e.message : '剪贴板加载失败';
+				document.getElementById('paste-content').innerHTML = '<p style="color:red">' + msg + '</p>';
 			}
 		}
 		async function loadDiscuss(id, forceRefresh = false) {
@@ -1169,10 +1177,7 @@
 				showPage('discuss');
 				currentType = 'discuss';
 				currentId = id;
-				const fetchOptions = { cache: 'no-store' };
-				const url = `https://luogu-api.amlg.top/discuss/${id}` + (forceRefresh ? `?r=1` : '');
-				const res = await fetch(url, fetchOptions);
-				const data = await res.json();
+				const data = await fetchLuogu(`/discuss/${id}`, forceRefresh);
 				const post = data && data.data && data.data.data ? data.data.data.post : null;
 				currentRawContent = post ? post.content || '' : '';
 				const rendered = renderMarkdown(currentRawContent);
@@ -1192,7 +1197,8 @@
 				]);
 			} catch (e) {
 				showPage('discuss');
-				document.getElementById('discuss-content').innerHTML = '<p style="color:red">讨论加载失败</p>';
+				const msg = e && typeof e.message === 'string' && e.message.indexOf('请求') === 0 ? e.message : '讨论加载失败';
+				document.getElementById('discuss-content').innerHTML = '<p style="color:red">' + msg + '</p>';
 			}
 		}
 		function parseRoute() {
